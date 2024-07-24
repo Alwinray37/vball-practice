@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/vball-practice/static/css/main.5c688f51.css",
+    "main.js": "/vball-practice/static/js/main.5794787a.js",
+    "index.html": "/vball-practice/index.html",
+    "main.5c688f51.css.map": "/vball-practice/static/css/main.5c688f51.css.map",
+    "main.5794787a.js.map": "/vball-practice/static/js/main.5794787a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5c688f51.css",
+    "static/js/main.5794787a.js"
+  ]
+}
