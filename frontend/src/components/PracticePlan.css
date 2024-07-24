@@ -1,0 +1,109 @@
+/* src/components/PracticePlan.css */
+.practice-table {
+  width: 100%;
+  border-collapse: collapse;
+  /* margin: 20px 0; */
+  font-size: 1em;
+  min-width: 600px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.practice-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  font-weight: bold;
+}
+
+.practice-table th,
+.practice-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+.practice-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.practice-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.practice-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.practice-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.remove-button {
+  padding: 10px 20px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  background-color: #e53935;
+}
+
+.practice-table input,
+.practice-table textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.practice-table textarea {
+  resize: vertical;
+  min-height: 50px;
+}
+
+.add-drill-form {
+  margin: 20px 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.add-drill-form h3 {
+  margin-top: 0;
+}
+
+.add-drill-form input,
+.add-drill-form textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.add-drill-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.add-button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 150px;
+}
+
+.add-button:hover {
+  background-color: #45a049;
+}
+.notes-cell{
+    width: 300px;
+}

@@ -1,0 +1,33 @@
+/* src/components/DrillCard.css */
+.drill-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .drill-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .drill-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  .add-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5
+  }  
