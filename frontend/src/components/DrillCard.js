@@ -1,30 +1,49 @@
-// src/components/DrillCard.js
 import React from "react";
-import PropTypes from "prop-types";
-import "./DrillCard.css";
+import { youtubeEmbedUrl } from "../data/storage";
 
-const DrillCard = ({ drill, addDrillToPlan }) => {
+const DrillCard = ({ drill, onAdd, onEdit, onDelete }) => {
+  const embed = youtubeEmbedUrl(drill.video);
   return (
     <div className="drill-card">
-      <h3>{drill.name}</h3>
-      <p>{drill.description}</p>
-      {drill.image && <img src={drill.image} alt={drill.name} className="drill-image" />}
-      {drill.video && <div dangerouslySetInnerHTML={{ __html: drill.video }} />}
-      <button className="add-button" onClick={() => addDrillToPlan(drill)}>
-        Add to Practice Plan
-      </button>
+      <div className="drill-card-media">
+        {embed ? (
+          <iframe
+            src={embed}
+            title={drill.name}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        ) : drill.image ? (
+          <img src={drill.image} alt={drill.name} loading="lazy" />
+        ) : (
+          <div className="drill-card-placeholder">
+            <i className="fa-solid fa-volleyball" />
+          </div>
+        )}
+      </div>
+      <div className="drill-card-body">
+        <h3>{drill.name}</h3>
+        <p>{drill.description}</p>
+      </div>
+      <div className="drill-card-actions">
+        {onAdd && (
+          <button className="btn btn-primary" onClick={() => onAdd(drill)}>
+            + Add to Plan
+          </button>
+        )}
+        {onEdit && (
+          <button className="btn btn-ghost" onClick={() => onEdit(drill)}>
+            Edit
+          </button>
+        )}
+        {onDelete && (
+          <button className="btn btn-danger-ghost" onClick={() => onDelete(drill)}>
+            Delete
+          </button>
+        )}
+      </div>
     </div>
   );
-};
-
-DrillCard.propTypes = {
-  drill: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    image: PropTypes.string,
-    video: PropTypes.string,
-  }).isRequired,
-  addDrillToPlan: PropTypes.func.isRequired,
 };
 
 export default DrillCard;

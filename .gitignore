@@ -1,0 +1,11 @@
+.claude
+
+# dependencies
+node_modules/
+
+# environment files (secrets)
+backend/.env
+.env
+
+# misc
+.DS_Store

@@ -1,125 +1,97 @@
-// src/App.js
-import React, { useState } from "react";
-import DrillCard from "./components/DrillCard";
-import PracticePlan from "./components/PracticePlan";
-import { warmUpDrills, skillDrills, gameDrills } from "./drills";
+import React, { useEffect, useState } from "react";
+import {
+  HashRouter,
+  Navigate,
+  NavLink,
+  Route,
+  Routes,
+  useParams,
+} from "react-router-dom";
+import PlanBuilder from "./pages/PlanBuilder";
+import DrillLibrary from "./pages/DrillLibrary";
+import SavedPlans from "./pages/SavedPlans";
+import Practice from "./pages/Practice";
+import ToolDock from "./components/ToolDock";
+import { clearSession, getSession } from "./data/storage";
 import "./index.css";
 
+// Key the builder by plan id so switching between "new plan" and
+// "edit plan X" resets its state.
+function KeyedPlanBuilder() {
+  const { planId } = useParams();
+  return <PlanBuilder key={planId || "new"} />;
+}
+
+function CurrentPracticeRoute({ session }) {
+  return session ? (
+    <Navigate to={`/practice/${session.planId}`} replace />
+  ) : (
+    <Navigate to="/plans" replace />
+  );
+}
+
 function App() {
-  const [practicePlan, setPracticePlan] = useState([]);
-  const [customDrill, setCustomDrill] = useState({
-    name: "",
-    description: "",
-    image: "",
-    time: "",
-  });
-  const [selectedDrillType, setSelectedDrillType] = useState("warmUp");
+  const [session, setSession] = useState(getSession);
 
-  const addDrillToPlan = (drill) => {
-    setPracticePlan([...practicePlan, { ...drill, time: "", notes: "" }]);
-  };
-
-  const removeDrillFromPlan = (index) => {
-    const newPlan = [...practicePlan];
-    newPlan.splice(index, 1);
-    setPracticePlan(newPlan);
-  };
-
-  const handleCustomDrillChange = (e) => {
-    const { name, value } = e.target;
-    setCustomDrill({ ...customDrill, [name]: value });
-  };
-
-  const handleAddCustomDrill = () => {
-    addDrillToPlan(customDrill);
-    setCustomDrill({ name: "", description: "", image: "", time: "" });
-  };
-
-  const renderDrills = () => {
-    switch (selectedDrillType) {
-      case "warmUp":
-        return warmUpDrills;
-      case "skill":
-        return skillDrills;
-      case "game":
-        return gameDrills;
-      default:
-        return [];
-    }
-  };
+  useEffect(() => {
+    const syncSession = () => setSession(getSession());
+    window.addEventListener("storage", syncSession);
+    window.addEventListener("vbp-session-change", syncSession);
+    return () => {
+      window.removeEventListener("storage", syncSession);
+      window.removeEventListener("vbp-session-change", syncSession);
+    };
+  }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Volleyball Practice Plan</h1>
-      </header>
-      <div id="practice-plan-container">
-        <h2>Practice Plan</h2>
-        <PracticePlan
-          practicePlan={practicePlan}
-          removeDrillFromPlan={removeDrillFromPlan}
-        />
+    <HashRouter>
+      <div className="App">
+        <header className="app-header">
+          <span className="app-logo">VBall Practice</span>
+          <nav className="app-nav">
+            <NavLink to="/" end>
+              Plan Builder
+            </NavLink>
+            <NavLink to="/drills">Drills</NavLink>
+            <NavLink to="/plans">Saved Plans</NavLink>
+            {session && (
+              <>
+                <NavLink to="/practice" className="active-practice-link">
+                  Current Practice
+                </NavLink>
+                <button
+                  className="nav-end-practice"
+                  onClick={() => {
+                    if (window.confirm("Close the active practice?")) {
+                      clearSession();
+                      if (window.location.hash.startsWith("#/practice")) {
+                        window.location.hash = "#/plans";
+                      }
+                    }
+                  }}
+                >
+                  Close
+                </button>
+              </>
+            )}
+          </nav>
+        </header>
+        <ToolDock />
+        <main>
+          <Routes>
+            <Route path="/" element={<KeyedPlanBuilder />} />
+            <Route path="/builder/:planId" element={<KeyedPlanBuilder />} />
+            <Route path="/drills" element={<DrillLibrary />} />
+            <Route path="/plans" element={<SavedPlans />} />
+            <Route
+              path="/practice"
+              element={<CurrentPracticeRoute session={session} />}
+            />
+            <Route path="/practice/:planId" element={<Practice />} />
+          </Routes>
+        </main>
       </div>
-      <div className="add-drill-form">
-        <h3>Add Your Own Drill</h3>
-        <input
-          type="text"
-          name="name"
-          placeholder="Drill Name"
-          value={customDrill.name}
-          onChange={handleCustomDrillChange}
-        />
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={customDrill.description}
-          onChange={handleCustomDrillChange}
-        />
-        <input
-          type="text"
-          name="image"
-          placeholder="Image URL"
-          value={customDrill.image}
-          onChange={handleCustomDrillChange}
-        />
-        <input
-          type="text"
-          name="time"
-          placeholder="Time (e.g., 10 minutes)"
-          value={customDrill.time}
-          onChange={handleCustomDrillChange}
-        />
-        <button className="add-button" onClick={handleAddCustomDrill}>
-          Add Drill
-        </button>
-      </div>
-      <div className="tabs">
-        <button
-          className={`tab ${selectedDrillType === "warmUp" ? "active" : ""}`}
-          onClick={() => setSelectedDrillType("warmUp")}
-        >
-          Warm-Up Drills
-        </button>
-        <button
-          className={`tab ${selectedDrillType === "skill" ? "active" : ""}`}
-          onClick={() => setSelectedDrillType("skill")}
-        >
-          Skill Drills
-        </button>
-        <button
-          className={`tab ${selectedDrillType === "game" ? "active" : ""}`}
-          onClick={() => setSelectedDrillType("game")}
-        >
-          Game Drills
-        </button>
-      </div>
-      <div id="drillCard-container">
-        {renderDrills().map((drill, index) => (
-          <DrillCard key={index} drill={drill} addDrillToPlan={addDrillToPlan} />
-        ))}
-      </div>
-      
-    </div>
+    </HashRouter>
   );
 }
 
