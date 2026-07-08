@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FlexTimer from "./FlexTimer";
 import Scoreboard from "./Scoreboard";
 import { useToolTimers, getElapsedMs } from "../data/timerStore";
@@ -37,6 +37,7 @@ const WIDGET_DEFS = [
 // collapsed — their state lives in timerStore, not in these widgets.
 // Expand opens the whole toolbox fullscreen.
 const ToolDock = () => {
+  const dockRef = useRef(null);
   const [open, setOpen] = useState(() => read(DOCK_OPEN_KEY, false));
   const [widgets, setWidgets] = useState(() => read(WIDGETS_KEY, []));
   const [expanded, setExpanded] = useState(false);
@@ -53,6 +54,23 @@ const ToolDock = () => {
     const id = setInterval(() => setNow(Date.now()), 500);
     return () => clearInterval(id);
   }, [anyRunning, open]);
+
+  useEffect(() => {
+    if (!open || expanded) return undefined;
+
+    const handlePointerDown = (event) => {
+      if (dockRef.current?.contains(event.target)) return;
+      setOpen(false);
+      write(DOCK_OPEN_KEY, false);
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("touchstart", handlePointerDown);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("touchstart", handlePointerDown);
+    };
+  }, [expanded, open]);
 
   const toggleOpen = () => {
     setOpen((prev) => {
@@ -140,7 +158,7 @@ const ToolDock = () => {
   }
 
   return (
-    <div className={`tool-dock ${open ? "open" : ""}`}>
+    <div className={`tool-dock ${open ? "open" : ""}`} ref={dockRef}>
       {open ? (
         <div className="tool-dock-panel">
           <div className="tool-dock-bar">

@@ -40,6 +40,8 @@ const PlanBuilder = () => {
   );
 
   const addItem = (drill) => {
+    if (plan.items.some((item) => item.drillId === drill.id)) return;
+
     setPlan((prev) => ({
       ...prev,
       items: [
@@ -254,7 +256,12 @@ const PlanBuilder = () => {
       </div>
       <div className="card-grid">
         {visibleDrills.map((drill) => (
-          <DrillCard key={drill.id} drill={drill} onAdd={addItem} />
+          <DrillCard
+            key={drill.id}
+            drill={drill}
+            onAdd={addItem}
+            added={plan.items.some((item) => item.drillId === drill.id)}
+          />
         ))}
       </div>
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { youtubeEmbedUrl } from "../data/storage";
 
-const DrillCard = ({ drill, onAdd, onEdit, onDelete }) => {
+const DrillCard = ({ drill, onAdd, onEdit, onDelete, added = false }) => {
   const embed = youtubeEmbedUrl(drill.video);
   return (
     <div className="drill-card">
@@ -27,8 +27,12 @@ const DrillCard = ({ drill, onAdd, onEdit, onDelete }) => {
       </div>
       <div className="drill-card-actions">
         {onAdd && (
-          <button className="btn btn-primary" onClick={() => onAdd(drill)}>
-            + Add to Plan
+          <button
+            className={`btn ${added ? "btn-ghost" : "btn-primary"}`}
+            onClick={() => onAdd(drill)}
+            disabled={added}
+          >
+            {added ? "Added" : "+ Add to Plan"}
           </button>
         )}
         {onEdit && (
