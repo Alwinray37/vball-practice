@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/vball-practice/static/css/main.c34e4256.css",
-    "main.js": "/vball-practice/static/js/main.8cbbe1cd.js",
+    "main.js": "/vball-practice/static/js/main.afb6b681.js",
     "index.html": "/vball-practice/index.html",
     "main.c34e4256.css.map": "/vball-practice/static/css/main.c34e4256.css.map",
-    "main.8cbbe1cd.js.map": "/vball-practice/static/js/main.8cbbe1cd.js.map"
+    "main.afb6b681.js.map": "/vball-practice/static/js/main.afb6b681.js.map"
   },
   "entrypoints": [
     "static/css/main.c34e4256.css",
-    "static/js/main.8cbbe1cd.js"
+    "static/js/main.afb6b681.js"
   ]
 }
